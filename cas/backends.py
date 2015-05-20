@@ -112,7 +112,7 @@ def _internal_verify_cas(ticket, service, suffix):
                     pgtIou.delete()
                 except Tgt.DoesNotExist:
                     Tgt.objects.create(username=username, tgt=pgtIou.tgt)
-                    logger.info('Created TGT for {user}'.format(
+                    logger.warning('Created TGT for {user}'.format(
                         user=username
                     ))
                     pgtIou.delete()
@@ -192,7 +192,7 @@ def _get_pgtiou(pgt):
     while not pgtIou and retries_left:
         try:
             p = PgtIOU.objects.get(tgt=pgt)
-            logger.info('PgtIOU retrieved.')
+            logger.warning('PgtIOU retrieved.')
             return p
         except PgtIOU.DoesNotExist:
             time.sleep(1)
