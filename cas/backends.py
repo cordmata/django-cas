@@ -192,6 +192,9 @@ def _get_pgtiou(pgt):
         except PgtIOU.DoesNotExist:
             time.sleep(1)
             retries_left -= 1
+            logger.warning('Did not fetch ticket, trying again. {tries} tries left'.format(
+                tries=retries_left
+            ))
     raise CasTicketException("Could not find pgtIou for pgt %s" % pgt)
 
 
