@@ -112,6 +112,9 @@ def _internal_verify_cas(ticket, service, suffix):
                     pgtIou.delete()
                 except Tgt.DoesNotExist:
                     Tgt.objects.create(username=username, tgt=pgtIou.tgt)
+                    logger.info('Created TGT for {user}'.format(
+                        user=username
+                    ))
                     pgtIou.delete()
                 except Exception:
                     logger.error('Failed to do proxy authentication.')
@@ -188,7 +191,9 @@ def _get_pgtiou(pgt):
     retries_left = 5
     while not pgtIou and retries_left:
         try:
-            return PgtIOU.objects.get(tgt=pgt)
+            p = PgtIOU.objects.get(tgt=pgt)
+            logger.info('PgtIOU retrieved.')
+            return p
         except PgtIOU.DoesNotExist:
             time.sleep(1)
             retries_left -= 1
